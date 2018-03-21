@@ -45,4 +45,28 @@ $("#step0").css("display", "none");
 $("#step1").css("display", "none");
 $("#step2").css("display", "block");
 };
-}]);
+$scope.saveConfig2 = function () {
+	$('#step0').hide();
+	$('#step1').hide();
+	$("#step0").css("display", "none");
+	$("#step1").css("display", "none");
+	
+	console.log($scope.app.uri + '/validateHTMLStrcture.html');
+	$http({
+        method: 'POST',
+        url: $scope.app.uri + '/validateHTMLStrcture.html'
+    }).success(function (data) {
+        console.log('success');
+        $("#step2").css("display", "none");
+        $("#step3").css("display", "block");
+        $('#step3').show();
+    }).error(function (data, status) {
+        // Response code 404 will be when configs are not available
+    	$("#step2").css("display", "block");
+        if (status !== 404) {
+            NotificationsService.add('error', "Error", "Something went wrong while validating the HTML pattern");
+        }
+    });
+	
+	};
+	}]);

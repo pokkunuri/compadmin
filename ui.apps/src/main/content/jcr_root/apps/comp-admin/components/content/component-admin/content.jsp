@@ -41,6 +41,7 @@
 		<cq:include script="includes/form.jsp"/>
 		<cq:include script="includes/form1.jsp"/>
 		<cq:include script="includes/form2.jsp"/>
+		<cq:include script="includes/form3.jsp"/>
 
 
 </div>
