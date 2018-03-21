@@ -1,6 +1,6 @@
 <div id="step1" class="no-separator" novalidate style="display:none;">
    <div class="form-row">
-   	<h2 class="coral-Heading coral-Heading--2">Step 1 : Define Component Properties</h2>
+   	<h2 class="coral-Heading coral-Heading--2"><b>Step 1 : Define Component Properties</b></h2>
    	<hr/>
    </div>
    

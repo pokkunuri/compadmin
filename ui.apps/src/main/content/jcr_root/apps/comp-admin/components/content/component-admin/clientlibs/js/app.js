@@ -51,15 +51,24 @@ $scope.saveConfig2 = function () {
 	$("#step0").css("display", "none");
 	$("#step1").css("display", "none");
 	
-	console.log($scope.app.uri + '/validateHTMLStrcture.html');
+	console.log('/bin/validateHTMLStrcture.html');
 	$http({
         method: 'POST',
-        url: $scope.app.uri + '/validateHTMLStrcture.html'
-    }).success(function (data) {
-        console.log('success');
+        url: '/bin/validateHTMLStrcture.html'
+    }).success(function (data,status) {
+        console.log(data);
         $("#step2").css("display", "none");
         $("#step3").css("display", "block");
         $('#step3').show();
+       // var jsonResponse = JSON.parse(data);
+        for(var element in data) {
+	        	if (data.hasOwnProperty(element)) {
+	        		$('table').append("<tr class='coral-Table-row'><td class='coral-Table-cell'>"+element+"</td><td class='coral-Table-cell'>"+data[element]+"</td><td class='coral-Table-cell'>"+data[element]+"</td>" +
+	        				"<td class='coral-Table-cell'><coral-checkbox value='yes'>Mandatory attribute</coral-checkbox></td>" +
+	        				"</td><td class='coral-Table-cell'><input is='coral-textfield' placeholder='Enter Field Label' name='fieldLabel' value=''></td></tr>");
+	        	}
+        }
+        
     }).error(function (data, status) {
         // Response code 404 will be when configs are not available
     	$("#step2").css("display", "block");

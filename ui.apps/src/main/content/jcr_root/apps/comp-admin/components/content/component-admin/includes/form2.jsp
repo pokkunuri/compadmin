@@ -1,6 +1,6 @@
 <div id="step2" class="no-separator" novalidate style="display:none;">
    <div class="form-row">
-   	<h2 class="coral-Heading coral-Heading--2">Step 2 : Setup the HTML Rendering script</h2>
+   	<h2 class="coral-Heading coral-Heading--2"><b>Step 2 : Setup the HTML Rendering script</b></h2>
    	<hr/>
    </div>
    
@@ -10,8 +10,9 @@
    
     <div class="form-row">
     
-    <textarea rows="20" name ="componentHtml" cols="160"  ng-required="true" ng-pattern="/^\/.+$/" ng-model="form.componentHtml" placeholder="Provide Component HTML Design">
-    </textarea>
+    <textarea is="coral-textarea" ng-required="true" ng-pattern="/^\/.+$/" ng-model="form.componentHtml" placeholder="Provide Component HTML Design" name="componentHtml" value="" rows="20" cols="160">
+</textarea>
+
    </div>
    
 
