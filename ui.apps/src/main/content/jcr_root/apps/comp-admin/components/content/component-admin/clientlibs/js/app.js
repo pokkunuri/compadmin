@@ -29,62 +29,20 @@ angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.noti
     $scope.form = {
         enabled: false
     };
-
-    $scope.init = function(appUri) {
-        $scope.app.uri = appUri;
-
-        $http({
-            method: 'GET',
-            url: $scope.app.uri + '/config/enabled'
-        }).success(function (data) {
-            $scope.form.enabled = data;
-        }).error(function (data, status) {
-            // Response code 404 will be when configs are not available
-            if (status !== 404) {
-                NotificationsService.add('error', "Error", "Something went wrong while fetching previous configurations");
-            }
-        });
-    };
-
+    $scope.init = function(appUri) {};
     $scope.saveConfig = function () {
-        $http({
-            method: 'POST',
-            url: $scope.app.uri + '/config',
-            data: 'enabled=' + $scope.form.enabled || 'false',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).
-        success(function (data, status, headers, config) {
-            if ($scope.form.enabled) {
-                $http({
-                    method: 'POST',
-                    url: $scope.app.uri,
-                    data: './clientlib-authoring/categories=cq.authoring.editor.hook',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                });
-            } else {
-                $http({
-                    method: 'POST',
-                    url: $scope.app.uri,
-                    data: './clientlib-authoring/categories@Delete',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                });
-            }
-
-            $scope.app.running = false;
-            NotificationsService.add('success', "Success", "Your configuration has been saved");
-            NotificationsService.running($scope.app.running);
-        }).
-        error(function (data) {
-            NotificationsService.add('error', 'ERROR', data.title + '. ' + data.message);
-            $scope.app.running = false;
-            NotificationsService.running($scope.app.running);
-
-        });
+$('#step0').hide();
+$('#step1').show();
+$("#step0").css("display", "none");
+$("#step1").css("display", "block");
     };
+    
+    $scope.saveConfig1 = function () {
+$('#step0').hide();
+$('#step1').hide();
+$('#step2').show();
+$("#step0").css("display", "none");
+$("#step1").css("display", "none");
+$("#step2").css("display", "block");
+};
 }]);

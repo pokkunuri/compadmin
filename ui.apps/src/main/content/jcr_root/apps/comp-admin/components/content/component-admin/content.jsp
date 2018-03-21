@@ -35,10 +35,12 @@
 
     <ul>
         <li>Step 1 : Define Component Properties</li>
-        <li>Step 2 : Define Dialog attributes</li>
-         <li>Step 3 : Setup the HTML Rendering script</li>
+         <li>Step 2 : Setup the HTML Rendering script</li>
+         <li>Step 3 : Define Dialog attributes</li>
     </ul>
 		<cq:include script="includes/form.jsp"/>
+		<cq:include script="includes/form1.jsp"/>
+		<cq:include script="includes/form2.jsp"/>
 
 
 </div>

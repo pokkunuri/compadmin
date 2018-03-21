@@ -1,4 +1,5 @@
-<form class="no-separator" novalidate>
+<form class="no-separator" novalidate >
+<div id="step0" style="display:block;">
     <div class="form-row">
         <div class="form-left-cell">&nbsp;</div>
         <button
@@ -9,4 +10,4 @@
         </button>
 
     </div>
-</form>
+ </div>
