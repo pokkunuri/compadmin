@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/apps/comp-admin"/>
+
+    <filter root="/apps/sling/servlet/errorhandler"/>
+
+
+    <filter root="/conf/comp-admin" mode="merge"/>
+
+
+    <filter root="/etc/clientlibs/comp-admin"/>
+
+
+    <filter root="/etc/designs/comp-admin">
+        <include pattern="/etc/designs/comp-admin/jcr:content"/>
+
+        <include pattern="/etc/designs/comp-admin/jcr:content/clientlibs"/>
+        <include pattern="/etc/designs/comp-admin/jcr:content/clientlibs/.*"/>
+
+    </filter>
+     <filter root="/etc/comp-admin"/>
+
+</workspaceFilter>
