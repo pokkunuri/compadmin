@@ -1,0 +1,72 @@
+# TODO Cleanse this.
+# Java noise
+*.class
+
+# SCM directories
+.svn
+.git
+.cvs
+
+# Archive files
+*.tar.gz
+*.gz
+*.tar
+*.rar
+
+# OSX noise
+.DS_Store
+*.pbxuser
+profile
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Windows noise
+desktop.ini
+
+# Eclipse/Flash Builder noise
+.actionScriptProperties
+.flexProperties
+.project
+.classpath
+bin/*
+bin-debug/*
+report/*
+bin-test/*
+.flexLibProperties
+
+# Maven noise
+target/*
+
+# Project specific
+*/.settings/*
+*/target/*
+*/.gitignore
+.settings/*
+/target
+*/classes/*
+dependency-reduced-pom.xml
+*/dependency-reduced-pom.xml
+
+# File Vault
+.vlt
+
+# Local specific
+/app/src/main/content/jcr_root/META-INF/
+/apps/src/main/content/jcr_root/WEB-INF/
+
+#Intellij specific
+.metadata
+.project
+.classpath
+.settings/
+*.brackets.json
+.idea/
+*.iml
+
+# Ignoring node files
+*/node/*
+*/node_modules/*
+*/package-lock.json
