@@ -14,7 +14,7 @@
    </div>
    
     <div class="form-row">
-   	<label acs-coral-heading>
+   	<label acs-coral-heading style="float:left;">
 			Component Description
 		</label>
 		<span>
@@ -24,7 +24,7 @@
    
    
    <div class="form-row">
-   	<label acs-coral-heading>
+   	<label acs-coral-heading style="float:left;">
 			Component Group
 		</label>
 		<span>

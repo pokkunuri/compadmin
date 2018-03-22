@@ -4,7 +4,7 @@
    	<hr/>
    </div>
     <div class="form-row">
-    <table class="coral-Table">
+    <table class="coral-Table coral-Table--bordered">
     <thead class="coral-Table-head">
     <tr class="coral-Table-row">
       <th class="coral-Table-headerCell">S.no</th>

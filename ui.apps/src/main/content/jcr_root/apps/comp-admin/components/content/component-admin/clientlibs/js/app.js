@@ -25,6 +25,8 @@ angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.noti
     $scope.app = {
         uri: ''
     };
+    
+    var xtypes = ["textfield","pathfield","image"];
 
     $scope.form = {
         enabled: false
@@ -61,10 +63,25 @@ $scope.saveConfig2 = function () {
         $("#step3").css("display", "block");
         $('#step3').show();
        // var jsonResponse = JSON.parse(data);
+        
+
         for(var element in data) {
 	        	if (data.hasOwnProperty(element)) {
-	        		$('table').append("<tr class='coral-Table-row'><td class='coral-Table-cell'>"+element+"</td><td class='coral-Table-cell'>"+data[element]+"</td><td class='coral-Table-cell'>"+data[element]+"</td>" +
-	        				"<td class='coral-Table-cell'><coral-checkbox value='yes'>Mandatory attribute</coral-checkbox></td>" +
+	        		
+	                var select = "<coral-select name='Select'>";
+	                for(var element1 in xtypes){
+		                	console.log("element :"+element1);
+		                	if(xtypes[element1] == data[element]){
+		                		select = select + "<coral-select-item  value='"+xtypes[element1]+"' selected>"+xtypes[element1]+"</coral-select-item>";
+		                	} else {
+		                		select = select + "<coral-select-item  value='"+xtypes[element1]+"'>"+xtypes[element1]+"</coral-select-item>";
+		                	}
+	                }
+	                select = select + "</coral-select>";
+	                
+	        		$('table').append("<tr class='coral-Table-row'><td class='coral-Table-cell'>"+element+"</td><td class='coral-Table-cell'>"+data[element]+"</td><td class='coral-Table-cell'>" +select +
+	        				"</td>" +
+	        				"<td class='coral-Table-cell'><div class='coral-RadioGroup coral-RadioGroup--labelsBelow'><label1 class='coral-Radio' style='float:none;'><coral-radio name='r1'>Yes</coral-radio></label1><label1 class='coral-Radio' style='float:none;'><coral-radio name='r1'>No</coral-radio></label1></div></td>" +
 	        				"</td><td class='coral-Table-cell'><input is='coral-textfield' placeholder='Enter Field Label' name='fieldLabel' value=''></td></tr>");
 	        	}
         }
@@ -78,4 +95,23 @@ $scope.saveConfig2 = function () {
     });
 	
 	};
+	
+	$scope.saveConfig3 = function () {
+		
+		$http({
+	        method: 'POST',
+	        url: '/bin/createComponentStructure.html'
+	    }).success(function (data,status) {
+	       console.log('successful');
+	       // var jsonResponse = JSON.parse(data);
+	    }).error(function (data, status) {
+	        // Response code 404 will be when configs are not available
+	        if (status !== 404) {
+	            NotificationsService.add('error', "Error", "Something went wrong while validating the HTML pattern");
+	        }
+	    });
+		
+		};
+	
+	
 	}]);

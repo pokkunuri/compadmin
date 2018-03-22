@@ -10,7 +10,7 @@
    
     <div class="form-row">
     
-    <textarea is="coral-textarea" ng-required="true" ng-pattern="/^\/.+$/" ng-model="form.componentHtml" placeholder="Provide Component HTML Design" name="componentHtml" value="" rows="20" cols="160">
+    <textarea is="coral-textarea" ng-required="true" ng-pattern="/^\/.+$/" ng-model="form.componentHtml" placeholder="Provide Component HTML Design" name="componentHtml" value="" rows="20" cols="500">
 </textarea>
 
    </div>
