@@ -21,8 +21,7 @@
 /*global angular: false, ace: false qrCode: false*/
 
 angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.notifications']).controller('MainCtrl', ['$scope', '$http', '$timeout', 'NotificationsService', function ($scope, $http, $timeout, NotificationsService) {
-
-    $scope.app = {
+	$scope.app = {
         uri: ''
     };
     
@@ -33,20 +32,82 @@ angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.noti
     };
     $scope.init = function(appUri) {};
     $scope.saveConfig = function () {
-$('#step0').hide();
-$('#step1').show();
-$("#step0").css("display", "none");
-$("#step1").css("display", "block");
+		$('#step0').hide();
+		$('#step1').show();
+		$("#step0").css("display", "none");
+		$("#step1").css("display", "block");
     };
     
     $scope.saveConfig1 = function () {
-$('#step0').hide();
-$('#step1').hide();
-$('#step2').show();
-$("#step0").css("display", "none");
-$("#step1").css("display", "none");
-$("#step2").css("display", "block");
-};
+		$('#step0').hide();
+		$('#step1').hide();
+		$('#step2').show();
+		$("#step0").css("display", "none");
+		$("#step1").css("display", "none");
+		$("#step2").css("display", "block");
+	};
+	function createRow($table) {
+		var $row = document.createElement("tr");
+		$row.classList.add("coral-Table-row", "js-suggestion-row");
+		return $table.appendChild($row);
+	}
+
+	function createCell($row, value, addClass, $childEl) {
+		console.log("Creating cell "+addClass + " with value "+value);
+		var $cell = document.createElement("td");
+		$cell.classList.add("coral-Table-cell", addClass);
+		$cell.innerHTML = value;
+		if ($childEl) {
+			$cell.appendChild($childEl);
+		}
+		return $row.appendChild($cell);
+	}
+
+	function createSelectionDropdown(addClass, optionValues, defaultValue) {
+		var $select = document.createElement("coral-select");
+		$select.classList.add(addClass)
+		$select.setAttribute("name", "Select");
+
+		optionValues.forEach(element => {
+			console.log("Creating option "+ element);
+			var $newOptionEl = createOption(element, element == defaultValue);
+			$select.appendChild($newOptionEl);
+		});
+
+
+		return $select;
+	}
+
+	function createOption(value, isDefault) {
+		var $option = document.createElement("coral-select-item");
+		$option.value = value;
+		$option.setAttribute("name", value);
+		$option.innerHTML = value;
+		$option.innerText = value;
+		if (isDefault) {
+			$option.setAttribute("selected", "selected");
+		}
+		return $option;
+	}
+
+	function getFormData() {
+		var formData = []
+		var rows = document.querySelectorAll(".js-suggestion-row");
+		rows.forEach($row => {
+			var rowData = {};
+			var $selected = $row.querySelector("coral-select-item[selected]");
+			rowData["resourceType"] = $selected.value;
+
+			var $isMandatory = $row.querySelector("input[type='radio']");
+			rowData["isMandatory"] = $isMandatory.value;
+
+			var $fieldLabel = $row.querySelector("[name='fieldLabel']");
+			rowData["fieldLabel"] = $fieldLabel.value;
+			formData.push(rowData);
+		});
+		return formData;
+	}
+
 $scope.saveConfig2 = function () {
 	$('#step0').hide();
 	$('#step1').hide();
@@ -62,29 +123,33 @@ $scope.saveConfig2 = function () {
         $("#step2").css("display", "none");
         $("#step3").css("display", "block");
         $('#step3').show();
-       // var jsonResponse = JSON.parse(data);
-        
+	   // var jsonResponse = JSON.parse(data);
+	   
 
-        for(var element in data) {
-	        	if (data.hasOwnProperty(element)) {
-	        		
-	                var select = "<coral-select name='Select'>";
-	                for(var element1 in xtypes){
-		                	console.log("element :"+element1);
-		                	if(xtypes[element1] == data[element]){
-		                		select = select + "<coral-select-item  value='"+xtypes[element1]+"' selected>"+xtypes[element1]+"</coral-select-item>";
-		                	} else {
-		                		select = select + "<coral-select-item  value='"+xtypes[element1]+"'>"+xtypes[element1]+"</coral-select-item>";
-		                	}
-	                }
-	                select = select + "</coral-select>";
-	                
-	        		$('table').append("<tr class='coral-Table-row'><td class='coral-Table-cell'>"+element+"</td><td class='coral-Table-cell'>"+data[element]+"</td><td class='coral-Table-cell'>" +select +
-	        				"</td>" +
-	        				"<td class='coral-Table-cell'><div class='coral-RadioGroup coral-RadioGroup--labelsBelow'><label1 class='coral-Radio' style='float:none;'><coral-radio name='r1'>Yes</coral-radio></label1><label1 class='coral-Radio' style='float:none;'><coral-radio name='r1'>No</coral-radio></label1></div></td>" +
-	        				"</td><td class='coral-Table-cell'><input is='coral-textfield' placeholder='Enter Field Label' name='fieldLabel' value=''></td></tr>");
-	        	}
-        }
+	   var $table = document.querySelector('.js-dialog-create-table');
+	   
+	   var counter = 0;
+	   for (var element in data) {
+		   var $row = createRow($table);
+		   var $counterCell = createCell($row, element, "js-counter-" + counter);
+		   
+		   var $fieldTypeCell = createCell($row, data[element], "js-field-type" + counter);
+		   
+		   var $selectionDropdown = createSelectionDropdown("js-selection-dropdown" + counter, xtypes, data[element]);
+		   var $selectionCell = createCell($row, "", "counter-" + counter, $selectionDropdown);
+
+		   var radioHTML = "<div class='coral-RadioGroup coral-RadioGroup--labelsBelow'><label1 class='coral-Radio' style='float:none;'><coral-radio value='true' name='is-mandatory-" + counter +"'>Yes</coral-radio></label1><label1 class='coral-Radio' style='float:none;'><coral-radio value='false' name='is-mandatory-" + counter +"'>No</coral-radio></label1></div>";
+		   var $radioCell = createCell($row, "", "js-radio-mandatory"+ counter);
+		   $radioCell.innerHTML = radioHTML;
+
+		   var textfieldHtml = "<input is='coral-textfield' placeholder='Enter Field Label' name='fieldLabel' value=''>";
+		   var $textField = createCell($row, "", "js-field-name");
+		   $textField.innerHTML = textfieldHtml;
+
+
+		   var select = "<coral-select name='Select'>";
+		   counter++;
+	   }
         
     }).error(function (data, status) {
         // Response code 404 will be when configs are not available
@@ -98,7 +163,10 @@ $scope.saveConfig2 = function () {
 	
 	$scope.saveConfig3 = function () {
 		
-		var jsonObject = {};
+		var jsonObject = getFormData();
+
+
+
 		jsonObject['compTitle'] = $("input[name=componentName]").val();
 		jsonObject['compDesc'] =  $("input[name=componentDesc]").val();
 		jsonObject['compGroup'] = $("input[name=componentGrp]").val();
