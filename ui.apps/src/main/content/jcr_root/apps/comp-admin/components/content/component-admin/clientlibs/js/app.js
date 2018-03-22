@@ -36,15 +36,29 @@ angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.noti
 		$('#step1').show();
 		$("#step0").css("display", "none");
 		$("#step1").css("display", "block");
+	
     };
     
     $scope.saveConfig1 = function () {
-		$('#step0').hide();
-		$('#step1').hide();
-		$('#step2').show();
-		$("#step0").css("display", "none");
-		$("#step1").css("display", "none");
-		$("#step2").css("display", "block");
+		
+		var jsonObject ={};
+		jsonObject['compTitle'] = $("input[name=componentName]").val();
+		jsonObject['compDesc'] =  $("input[name=componentDesc]").val();
+		jsonObject['compGroup'] = $("input[name=componentGrp]").val();
+
+		$http({
+			method: 'POST',
+			url: '/bin/validateHTMLStrcture.html',
+			data: jsonObject
+		}).success(function (data,status) {
+			
+			$('#step0').hide();
+			$('#step1').hide();
+			$('#step2').show();
+			$("#step0").css("display", "none");
+			$("#step1").css("display", "none");
+			$("#step2").css("display", "block");
+		});
 	};
 	function createRow($table) {
 		var $row = document.createElement("tr");
@@ -113,11 +127,15 @@ $scope.saveConfig2 = function () {
 	$('#step1').hide();
 	$("#step0").css("display", "none");
 	$("#step1").css("display", "none");
+
+	var jsonObject ={};
+	jsonObject['componentHtml'] = $("textarea[name=componentHtml]").val();
+
 	
-	console.log('/bin/validateHTMLStrcture.html');
 	$http({
         method: 'POST',
-        url: '/bin/validateHTMLStrcture.html'
+		url: '/bin/validateHTMLStrcture.html',
+		data: jsonObject
     }).success(function (data,status) {
         console.log(data);
         $("#step2").css("display", "none");
@@ -163,18 +181,12 @@ $scope.saveConfig2 = function () {
 	
 	$scope.saveConfig3 = function () {
 		
-		var jsonObject = getFormData();
-
-
-
-		jsonObject['compTitle'] = $("input[name=componentName]").val();
-		jsonObject['compDesc'] =  $("input[name=componentDesc]").val();
-		jsonObject['compGroup'] = $("input[name=componentGrp]").val();
-		
-		console.log(jsonObject);
+		var formData = getFormData();
+		console.log(formData);
 		
 			$http({
-	        method: 'POST',
+			method: 'POST',
+			data : formData,
 	        url: '/bin/createComponentStructure.html'
 	    }).success(function (data,status) {
 	       console.log('successful');
