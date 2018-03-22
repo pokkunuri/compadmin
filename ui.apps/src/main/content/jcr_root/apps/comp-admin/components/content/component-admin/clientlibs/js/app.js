@@ -98,7 +98,14 @@ $scope.saveConfig2 = function () {
 	
 	$scope.saveConfig3 = function () {
 		
-		$http({
+		var jsonObject = {};
+		jsonObject['compTitle'] = $("input[name=componentName]").val();
+		jsonObject['compDesc'] =  $("input[name=componentDesc]").val();
+		jsonObject['compGroup'] = $("input[name=componentGrp]").val();
+		
+		console.log(jsonObject);
+		
+			$http({
 	        method: 'POST',
 	        url: '/bin/createComponentStructure.html'
 	    }).success(function (data,status) {
