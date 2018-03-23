@@ -53,7 +53,7 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 	protected final void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
 			throws ServletException, IOException {
 		ResourceResolver resolver = request.getResourceResolver();
-
+		String success = "success";
         String requestBody = ParseHTMLUtility.getBody(request);
 
 		try {
@@ -65,6 +65,7 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 			createComponent(compTitle, compDesc, compGroup, compHTML, resolver);
 			createComponentDialog(compTitle, jObject, resolver);
 			resolver.commit();
+			response.getWriter().write("success");
 		} catch (JSONException e) {
 			log.error("Error in parsing component structure {}", e);
 		}
