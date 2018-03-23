@@ -179,7 +179,7 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 			file.setProperty("name", "./element" + count);
 			file.setProperty("uploadUrl", "${suffix.path}");
 			file.setProperty("fileNameParameter", "./fileName");
-			file.setProperty("fileReferenceParameter", "./filereference");
+			file.setProperty("fileReferenceParameter", "./filereference"+count);
 			file.setProperty("fieldLabel", "Image Asset");
 		} catch (RepositoryException e) {
 			log.error("Error in creating imagefield {}", e);
