@@ -134,7 +134,7 @@ public class ParseHTMLUtility {
             }
         }
 
-        body = stringBuilder.toString();
+        body = stringBuilder.toString(); //send body.
         return body;
     }
 }
