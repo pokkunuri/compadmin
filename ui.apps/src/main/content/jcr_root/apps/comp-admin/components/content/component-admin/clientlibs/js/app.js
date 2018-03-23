@@ -100,7 +100,7 @@ $scope.saveConfig2 = function () {
 		
 		$http({
 	        method: 'POST',
-	        url: '/bin/createComponentStructure.html'
+	        url: '/bin/createComponent.html'
 	    }).success(function (data,status) {
 	       console.log('successful');
 	       // var jsonResponse = JSON.parse(data);
