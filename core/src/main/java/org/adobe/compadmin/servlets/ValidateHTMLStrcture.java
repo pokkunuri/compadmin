@@ -34,9 +34,14 @@ private static final Logger log = LoggerFactory.getLogger(ValidateHTMLStrcture.c
 		response.setContentType("application/json");
 		JSONObject jsonResponse = new JSONObject();
         try {
-            jsonResponse.put("1","textfield");
-            jsonResponse.put("2", "image");
-            jsonResponse.put("3", "pathfield");
+            JSONObject dialogFields = new JSONObject();
+            dialogFields.put("1", "textfield");
+            dialogFields.put("2", "image");
+            dialogFields.put("3", "pathfield");
+
+            jsonResponse.put("dialog", dialogFields);
+            jsonResponse.put("processedHtml", "this will be processed html");
+
             // Write the JSON to the response
             response.getWriter().write(jsonResponse.toString(3));
             // Be default, a 200 HTTP Response Status code is used
