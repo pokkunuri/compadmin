@@ -73,8 +73,7 @@ public class ParseHTMLUtility {
 					counter++;
 
 				}else if (node.nodeName().equalsIgnoreCase("img")) {
-
-					String replacementValue = "${properties.fileReference"
+					String replacementValue = "${properties.filereference"
 							+ (counter) + "}";
 
 					if (ruleMap.containsKey(node.nodeName())) {
@@ -103,11 +102,11 @@ public class ParseHTMLUtility {
 		try {
 			JSONObject dialog = new JSONObject(dialogString);
 			String placeholderHTML ="<div data-sly-test=\"${!properties.element0}\" class=\"cq-placeholder\"\n" +
-               "data-emptytext=\"Please configure the component here..\" ></div>";
+               "data-emptytext=\"Please configure the component here..\" ></div> <div data-sly-test= \"${properties.element0}\"";
 			Element firstDiv = document.select("div").first();
 			firstDiv.before(placeholderHTML);
 			finalResponse.put("dialog", dialog);
-			finalResponse.put("processedHtml", document.body().html());
+			finalResponse.put("processedHtml", document.body().html()+"</div>");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
