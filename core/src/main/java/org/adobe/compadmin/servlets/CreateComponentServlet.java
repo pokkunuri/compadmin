@@ -53,7 +53,7 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 	@Override
 	protected final void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
 			throws ServletException, IOException {
-		String componentStructure = "{\"compTitle\": \"sample ddd\",\"compDesc\": \"sample\",\"compGroup\": \"test\",\"compHTML\": \"asdadssdasdasdasdsa\",\"dialog\": [{\"type\": \"textfield\",\"label\": \"sample\",\"isMandatory\": \"No\"},{\"type\": \"image\",\"label\": \"sample\",\"isMandatory\": \"No\"}]}";
+		String componentStructure = "{\"compTitle\": \"sample ddd\",\"compDesc\": \"sample\",\"compGroup\": \"test\",\"compHTML\": \"asdadssdasdasdasdsa\",\"dialog\": [{\"type\": \"textfield\",\"label\": \"sample\",\"isMandatory\": \"No\"},{\"type\": \"image\",\"label\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"type\": \"textfield\",\"label\": \"sample\",\"isMandatory\": \"No\"},{\"type\": \"image\",\"label\": \"sampleImage\",\"isMandatory\": \"Yes\"}]}";
 		ResourceResolver resolver = request.getResourceResolver();
 		try {
 			JSONObject jObject = new JSONObject(componentStructure.trim());
@@ -127,8 +127,10 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 				String propertyType = property.getString("type");
 				switch (propertyType) {
 				case TEXTFIELD:
-					addTextfieldToNode(component,items2, property, i, resolver);
+					addTextfieldToNode(items2, property, i, resolver);
 					break;
+				case IMAGE:
+					addImageToNode(items2, property, i, resolver);
 				default:
 					break;
 				}
@@ -140,14 +142,51 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 		}
 	}
 
-	private void addTextfieldToNode(Node component, Node items, JSONObject property, int count, ResourceResolver resolver) {
+	private void addImageToNode(Node items, JSONObject property, int count, ResourceResolver resolver) {
 		Session session = resolver.adaptTo(Session.class);
 		if (session == null) {
 			log.error("Error in getting session");
 			return;
 		}
 		try {
-			Node text = JcrUtil.createUniqueNode(items, "text", JcrConstants.NT_UNSTRUCTURED, session);
+			Node imageCell = JcrUtil.createUniqueNode(items, "image"+count, JcrConstants.NT_UNSTRUCTURED, session);
+			imageCell.setProperty("sling:resourceType", "granite/ui/components/foundation/section");
+			imageCell.setProperty("jcr:title", property.getString("label"));
+			Node layout = JcrUtil.createUniqueNode(imageCell, "layout", JcrConstants.NT_UNSTRUCTURED, session);
+			layout.setProperty("margin",false);
+			layout.setProperty("sling:resourceType", "granite/ui/components/foundation/layouts/fixedcolumns");
+			Node items1 = JcrUtil.createUniqueNode(imageCell, "items", JcrConstants.NT_UNSTRUCTURED, session);
+			Node column = JcrUtil.createUniqueNode(items1, "column", JcrConstants.NT_UNSTRUCTURED, session);
+			column.setProperty("sling:resourceType", "granite/ui/components/foundation/container");
+			Node items2 = JcrUtil.createUniqueNode(column, "items", JcrConstants.NT_UNSTRUCTURED, session);
+			Node file = JcrUtil.createUniqueNode(items2, "file", JcrConstants.NT_UNSTRUCTURED, session);
+			file.setProperty("sling:resourceType", "cq/gui/components/authoring/dialog/fileupload");
+			file.setProperty("name", "./image"+count+"/element" + count);
+			file.setProperty("uploadUrl", "${suffix.path}");
+			file.setProperty("fileNameParameter", "./image"+count+"/fileName");
+			file.setProperty("fileReferenceParameter", "./image"+count+"/filereference");
+			file.setProperty("fieldLabel", "Image Asset");
+			if(property.getString("isMandatory").equals("Yes")){
+				Node altText = JcrUtil.createUniqueNode(items2, "alttext", JcrConstants.NT_UNSTRUCTURED, session);
+				altText.setProperty("sling:resourceType", "granite/ui/components/coral/foundation/form/textfield");
+				altText.setProperty("name", "./image"+count+"/elementalttext" + count);
+				altText.setProperty("fieldLabel","Alt-text");
+			}
+		} catch (RepositoryException e) {
+			log.error("Error in creating imagefield {}", e);
+		} catch (JSONException e) {
+			log.error("Error in parsing JSON for dialog {}", e);
+		}
+	}
+
+	private void addTextfieldToNode(Node items, JSONObject property, int count, ResourceResolver resolver) {
+		Session session = resolver.adaptTo(Session.class);
+		if (session == null) {
+			log.error("Error in getting session");
+			return;
+		}
+		try {
+			Node text = JcrUtil.createUniqueNode(items, "text"+count, JcrConstants.NT_UNSTRUCTURED, session);
 			text.setProperty("sling:resourceType", "granite/ui/components/coral/foundation/form/textfield");
 			text.setProperty("name", "./element" + count);
 			text.setProperty("fieldLabel", property.getString("label"));

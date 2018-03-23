@@ -25,7 +25,8 @@ angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.noti
         uri: ''
     };
     
-    var xtypes = ["textfield","pathfield","image"];
+	var xtypes = ["textfield","pathfield","image"];
+	var processedHtml;
 
     $scope.form = {
         enabled: false
@@ -40,25 +41,13 @@ angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.noti
     };
     
     $scope.saveConfig1 = function () {
-		
-		var jsonObject ={};
-		jsonObject['compTitle'] = $("input[name=componentName]").val();
-		jsonObject['compDesc'] =  $("input[name=componentDesc]").val();
-		jsonObject['compGroup'] = $("input[name=componentGrp]").val();
 
-		$http({
-			method: 'POST',
-			url: '/bin/validateHTMLStrcture.html',
-			data: jsonObject
-		}).success(function (data,status) {
-			
 			$('#step0').hide();
 			$('#step1').hide();
 			$('#step2').show();
 			$("#step0").css("display", "none");
 			$("#step1").css("display", "none");
 			$("#step2").css("display", "block");
-		});
 	};
 	function createRow($table) {
 		var $row = document.createElement("tr");
@@ -105,7 +94,7 @@ angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.noti
 	}
 
 	function getFormData() {
-		var formData = []
+		var formData = {}, dialogFields = [];
 		var rows = document.querySelectorAll(".js-suggestion-row");
 		rows.forEach($row => {
 			var rowData = {};
@@ -117,8 +106,16 @@ angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.noti
 
 			var $fieldLabel = $row.querySelector("[name='fieldLabel']");
 			rowData["fieldLabel"] = $fieldLabel.value;
-			formData.push(rowData);
+			dialogFields.push(rowData);
 		});
+
+		formData.dialog = dialogFields;
+
+		formData.compTitle = $("input[name=componentName]").val();
+		formData.compDesc =  $("input[name=componentDesc]").val();
+		formData.compGroup = $("input[name=componentGrp]").val();
+		console.log("HTML"+processedHtml);
+		formData.compHtml = processedHtml;
 		return formData;
 	}
 
@@ -147,13 +144,15 @@ $scope.saveConfig2 = function () {
 	   var $table = document.querySelector('.js-dialog-create-table');
 	   
 	   var counter = 0;
-	   for (var element in data) {
+	   var dialogFields = data.dialog;
+	   processedHtml = data.processedHtml;
+	   for (var element in dialogFields) {
 		   var $row = createRow($table);
 		   var $counterCell = createCell($row, element, "js-counter-" + counter);
 		   
-		   var $fieldTypeCell = createCell($row, data[element], "js-field-type" + counter);
+		   var $fieldTypeCell = createCell($row, dialogFields[element], "js-field-type" + counter);
 		   
-		   var $selectionDropdown = createSelectionDropdown("js-selection-dropdown" + counter, xtypes, data[element]);
+		   var $selectionDropdown = createSelectionDropdown("js-selection-dropdown" + counter, xtypes, dialogFields[element]);
 		   var $selectionCell = createCell($row, "", "counter-" + counter, $selectionDropdown);
 
 		   var radioHTML = "<div class='coral-RadioGroup coral-RadioGroup--labelsBelow'><label1 class='coral-Radio' style='float:none;'><coral-radio value='true' name='is-mandatory-" + counter +"'>Yes</coral-radio></label1><label1 class='coral-Radio' style='float:none;'><coral-radio value='false' name='is-mandatory-" + counter +"'>No</coral-radio></label1></div>";
