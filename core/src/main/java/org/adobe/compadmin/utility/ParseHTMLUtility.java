@@ -83,7 +83,7 @@ public class ParseHTMLUtility {
             JSONObject dialog = new JSONObject(dialogString);
 
             finalResponse.put("dialog", dialog);
-            finalResponse.put("processedHtml", document.html());
+            finalResponse.put("processedHtml", document.body().html());
 
         } catch (JSONException e) {
             // TODO Auto-generated catch block
