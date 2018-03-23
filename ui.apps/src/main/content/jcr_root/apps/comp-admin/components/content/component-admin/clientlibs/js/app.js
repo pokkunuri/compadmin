@@ -118,6 +118,19 @@ angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.noti
 		formData.compHtml = processedHtml;
 		return formData;
 	}
+	
+	$scope.saveConfig5 = function () {
+		
+		if($('#showHTML').is(":visible")) {
+			$('#showHTML').css("display", "none");
+			$('#showHTML').hide();
+			
+		} else {
+			$('#showHTML').css("display", "block");
+			$('#showHTML').show();
+		}
+		
+	}
 
 $scope.saveConfig2 = function () {
 	$('#step0').hide();
@@ -147,6 +160,7 @@ $scope.saveConfig2 = function () {
 	   var counter = 0;
 	   var dialogFields = data.dialog;
 	   processedHtml = data.processedHtml;
+	   $('#htmlText').val(processedHtml);
 	   for (var element in dialogFields) {
 		   var $row = createRow($table);
 		   var $counterCell = createCell($row, counter, "js-counter-" + counter);
@@ -190,6 +204,22 @@ $scope.saveConfig2 = function () {
 	        url: '/bin/createComponent.html'
 	    }).success(function (data,status) {
 	       console.log('successful');
+	       console.log(data);
+	       if(data == 'success') {
+	    	   $('#step0').hide();
+	    		$('#step1').hide();
+	    		$("#step0").css("display", "none");
+	    		$("#step1").css("display", "none");
+	    		
+	    		$('#step2').hide();
+	    		$("#step2").css("display", "none");
+	    		
+	    		$('#step3').hide();
+	    		$("#step3").css("display", "none");
+	    		
+	    	   	NotificationsService.running(false);
+	    	   	NotificationsService.add('success', 'SUCCESS', 'Component Created Successfully!!!!');
+	       }
 	       // var jsonResponse = JSON.parse(data);
 	    }).error(function (data, status) {
 	        // Response code 404 will be when configs are not available

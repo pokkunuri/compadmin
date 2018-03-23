@@ -32,6 +32,8 @@ private static final Logger log = LoggerFactory.getLogger(ValidateHTMLStrcture.c
 		response.setContentType("application/json");
 
         String body = ParseHTMLUtility.getBody(request);
+        
+
 		JSONObject jsonResponse = new JSONObject();
         try {
             JSONObject bodyObj = new JSONObject(body);
