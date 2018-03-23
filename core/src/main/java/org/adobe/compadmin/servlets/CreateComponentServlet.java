@@ -10,16 +10,14 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.ValueFactory;
 import javax.servlet.ServletException;
-import javax.swing.JButton;
 
-import org.apache.felix.scr.annotations.Reference;
+import org.adobe.compadmin.utility.ParseHTMLUtility;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.jackrabbit.commons.JcrUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONException;
@@ -54,9 +52,15 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 	@Override
 	protected final void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
 			throws ServletException, IOException {
-		String componentStructure = "{\"compTitle\": \"sample ddd\",\"compDesc\": \"sample\",\"compGroup\": \"test\",\"compHTML\": \"asdadssdasdasdasdsa\",\"dialog\": [{\"type\": \"textfield\",\"label\": \"sample\",\"isMandatory\": \"No\"},{\"type\": \"image\",\"label\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"type\": \"textfield\",\"label\": \"sample\",\"isMandatory\": \"No\"},{\"type\": \"image\",\"label\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"type\": \"pathfield\",\"label\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"type\": \"pathfield\",\"label\": \"sampleImage\",\"isMandatory\": \"No\"}]}";
+		//String componentStructure = "{\"compTitle\": \"sample ddd\",\"compDesc\": \"sample\",\"compGroup\": \"test\",\"compHTML\": \"asdadssdasdasdasdsa\",\"dialog\": [{\"resourceType\": \"textfield\",\"fieldLabel\": \"sample\",\"isMandatory\": \"No\"},{\"resourceType\": \"image\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"resourceType\"},{\"resourceType\": \"textfield\",\"fieldLabel\": \"sample\",\"isMandatory\": \"No\"},{\"resourceType\": \"image\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"resourceType\": \"pathfield\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"resourceType\": \"pathfield\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"No\"}]}";
+		String componentStructure = request.getParameter("formdata");
+		log.info("formData",componentStructure);
 		ResourceResolver resolver = request.getResourceResolver();
+
+        String requestBody = ParseHTMLUtility.getBody(request);
+
 		try {
+            JSONObject requestObj = new JSONObject(requestBody);
 			JSONObject jObject = new JSONObject(componentStructure.trim());
 			String compTitle = jObject.getString("compTitle");
 			String compDesc = jObject.getString("compDesc");
@@ -125,7 +129,7 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 			JSONArray dialogProperties = new JSONArray(jObject.getString("dialog"));
 			for (int i = 0; i < dialogProperties.length(); i++) {
 				JSONObject property = (JSONObject) dialogProperties.get(i);
-				String propertyType = property.getString("type");
+				String propertyType = property.getString("resourceType");
 				switch (propertyType) {
 				case TEXTFIELD:
 					addTextfieldToNode(items2, property, i, resolver);
@@ -154,7 +158,7 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 		try {
 			Node pathCell = JcrUtil.createUniqueNode(items, "path" + count, JcrConstants.NT_UNSTRUCTURED, session);
 			pathCell.setProperty("sling:resourceType", "granite/ui/components/foundation/section");
-			pathCell.setProperty("jcr:title", property.getString("label"));
+			pathCell.setProperty("jcr:title", property.getString("fieldLabel"));
 			Node layout = JcrUtil.createUniqueNode(pathCell, "layout", JcrConstants.NT_UNSTRUCTURED, session);
 			layout.setProperty("margin", false);
 			layout.setProperty("sling:resourceType", "granite/ui/components/foundation/layouts/fixedcolumns");
@@ -165,7 +169,7 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 			Node link = JcrUtil.createUniqueNode(items2, "link", JcrConstants.NT_UNSTRUCTURED, session);
 			link.setProperty("sling:resourceType", "granite/ui/components/foundation/form/pathbrowser");
 			link.setProperty("name", "./path" + count + "/element" + count);
-			link.setProperty("fieldLabel", property.getString("label"));
+			link.setProperty("fieldLabel", property.getString("fieldLabel"));
 			link.setProperty("required", property.getString("isMandatory").equals("Yes") ? true : false);
 			Node title = JcrUtil.createUniqueNode(items2, "title", JcrConstants.NT_UNSTRUCTURED, session);
 			title.setProperty("sling:resourceType", "granite/ui/components/coral/foundation/form/textfield");
@@ -187,7 +191,7 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 		try {
 			Node imageCell = JcrUtil.createUniqueNode(items, "image" + count, JcrConstants.NT_UNSTRUCTURED, session);
 			imageCell.setProperty("sling:resourceType", "granite/ui/components/foundation/section");
-			imageCell.setProperty("jcr:title", property.getString("label"));
+			imageCell.setProperty("jcr:title", property.getString("fieldLabel"));
 			Node layout = JcrUtil.createUniqueNode(imageCell, "layout", JcrConstants.NT_UNSTRUCTURED, session);
 			layout.setProperty("margin", false);
 			layout.setProperty("sling:resourceType", "granite/ui/components/foundation/layouts/fixedcolumns");
@@ -226,7 +230,7 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 			Node text = JcrUtil.createUniqueNode(items, "text" + count, JcrConstants.NT_UNSTRUCTURED, session);
 			text.setProperty("sling:resourceType", "granite/ui/components/coral/foundation/form/textfield");
 			text.setProperty("name", "./element" + count);
-			text.setProperty("fieldLabel", property.getString("label"));
+			text.setProperty("fieldLabel", property.getString("fieldLabel"));
 			text.setProperty("required", property.getString("isMandatory").equals("Yes") ? true : false);
 		} catch (RepositoryException e) {
 			log.error("Error in creating textfield {}", e);

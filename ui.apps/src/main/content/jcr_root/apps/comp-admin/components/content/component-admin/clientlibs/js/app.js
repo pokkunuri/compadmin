@@ -132,7 +132,8 @@ $scope.saveConfig2 = function () {
 	$http({
         method: 'POST',
 		url: '/bin/validateHTMLStrcture.html',
-		data: jsonObject
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8;",
+		data: {"componentHtml" : jsonObject }
     }).success(function (data,status) {
         console.log(data);
         $("#step2").css("display", "none");
@@ -186,7 +187,7 @@ $scope.saveConfig2 = function () {
 			$http({
 			method: 'POST',
 			data : formData,
-	        url: '/bin/createComponentStructure.html'
+	        url: '/bin/createComponent.html'
 	    }).success(function (data,status) {
 	       console.log('successful');
 	       // var jsonResponse = JSON.parse(data);

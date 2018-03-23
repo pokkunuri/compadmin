@@ -1,10 +1,6 @@
 package org.adobe.compadmin.servlets;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 
@@ -34,8 +30,11 @@ private static final Logger log = LoggerFactory.getLogger(ValidateHTMLStrcture.c
 	        ServletException, IOException {
 		
 		response.setContentType("application/json");
+
+        String body = ParseHTMLUtility.getBody(request);
 		JSONObject jsonResponse = new JSONObject();
         try {
+            JSONObject bodyObj = new JSONObject(body);
             /*JSONObject dialogFields = new JSONObject();
             dialogFields.put("1", "textfield");
             dialogFields.put("2", "image");
