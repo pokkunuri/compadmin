@@ -10,6 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.commons.json.JSONException;
+import org.apache.sling.commons.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,9 +20,6 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.NodeVisitor;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class ParseHTMLUtility {
 
@@ -29,7 +28,7 @@ public class ParseHTMLUtility {
        private static Matcher matcher;
        private static Map<String, String> ruleMap = new LinkedHashMap<String, String>();
        private static Map<String, String> myMap = new LinkedHashMap<String, String>();
-       
+
        public static String parseHTMLUsingRuleMap(String html) {
     	     ruleMap.put("a", "attribute,href,pathfield");
              ruleMap.put("img", "attribute,src,image");
@@ -77,14 +76,20 @@ public class ParseHTMLUtility {
 
                     }
              });
-            // System.out.println(document.html());
              Gson gson = new Gson();
-             String jsonString  = gson.toJson(myMap);
-             JsonElement jelement = new JsonParser().parse(jsonString);
-             JsonObject jobject = jelement.getAsJsonObject();
-             jobject.addProperty("componentHTML", document.body().html());
-             String dummyJsonToThrow = gson.toJson(jelement);
-             return dummyJsonToThrow;
+        String dialogString = gson.toJson(myMap);
+        JSONObject finalResponse = new JSONObject();
+        try {
+            JSONObject dialog = new JSONObject(dialogString);
+
+            finalResponse.put("dialog", dialog);
+            finalResponse.put("processedHtml", document.body().html());
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return finalResponse.toString();
            
 
        }
@@ -129,7 +134,7 @@ public class ParseHTMLUtility {
             }
         }
 
-        body = stringBuilder.toString();
+        body = stringBuilder.toString(); //send body.
         return body;
     }
 }
