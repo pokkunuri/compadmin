@@ -54,8 +54,8 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 	@Override
 	protected final void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
 			throws ServletException, IOException {
-		String componentStructure = "{\"compTitle\": \"sample ddd\",\"compDesc\": \"sample\",\"compGroup\": \"test\",\"compHTML\": \"asdadssdasdasdasdsa\",\"dialog\": [{\"type\": \"textfield\",\"label\": \"sample\",\"isMandatory\": \"No\"},{\"type\": \"image\",\"label\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"type\": \"textfield\",\"label\": \"sample\",\"isMandatory\": \"No\"},{\"type\": \"image\",\"label\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"type\": \"pathfield\",\"label\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"type\": \"pathfield\",\"label\": \"sampleImage\",\"isMandatory\": \"No\"}]}";
-		//String componentStructure = request.getParameter("formData");
+		//String componentStructure = "{\"compTitle\": \"sample ddd\",\"compDesc\": \"sample\",\"compGroup\": \"test\",\"compHTML\": \"asdadssdasdasdasdsa\",\"dialog\": [{\"resourceType\": \"textfield\",\"fieldLabel\": \"sample\",\"isMandatory\": \"No\"},{\"resourceType\": \"image\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"resourceType\"},{\"resourceType\": \"textfield\",\"fieldLabel\": \"sample\",\"isMandatory\": \"No\"},{\"resourceType\": \"image\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"resourceType\": \"pathfield\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"resourceType\": \"pathfield\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"No\"}]}";
+		String componentStructure = request.getParameter("formdata");
 		log.info("formData",componentStructure);
 		ResourceResolver resolver = request.getResourceResolver();
 		try {
