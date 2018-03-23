@@ -48,7 +48,7 @@ private static final Logger log = LoggerFactory.getLogger(ValidateHTMLStrcture.c
         	log.debug("Json to process {} ", jsonToProcess);
 
             // Write the JSON to the response
-            response.getWriter().write(jsonResponse.toString(3));
+            response.getWriter().write(jsonToProcess);
             // Be default, a 200 HTTP Response Status code is used
         } catch (Exception e) {
             log.error("Could not formulate JSON response");
