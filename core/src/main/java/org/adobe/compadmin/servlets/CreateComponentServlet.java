@@ -176,7 +176,7 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 		try {
 			Node file = JcrUtil.createUniqueNode(items, "image"+count, JcrConstants.NT_UNSTRUCTURED, session);
 			file.setProperty("sling:resourceType", "cq/gui/components/authoring/dialog/fileupload");
-			file.setProperty("name", "./element" + count);
+			file.setProperty("name", "./filereference"+count);
 			file.setProperty("uploadUrl", "${suffix.path}");
 			file.setProperty("fileNameParameter", "./fileName");
 			file.setProperty("fileReferenceParameter", "./filereference"+count);
