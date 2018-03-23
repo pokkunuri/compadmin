@@ -29,7 +29,7 @@ public class ParseHTMLUtility {
        private static Matcher matcher;
        private static Map<String, String> ruleMap = new LinkedHashMap<String, String>();
        private static Map<String, String> myMap = new LinkedHashMap<String, String>();
-
+       
        public static String parseHTMLUsingRuleMap(String html) {
     	     ruleMap.put("a", "attribute,href,pathfield");
              ruleMap.put("img", "attribute,src,image");
@@ -77,11 +77,12 @@ public class ParseHTMLUtility {
 
                     }
              });
+            // System.out.println(document.html());
              Gson gson = new Gson();
              String jsonString  = gson.toJson(myMap);
              JsonElement jelement = new JsonParser().parse(jsonString);
              JsonObject jobject = jelement.getAsJsonObject();
-             jobject.addProperty("componentHTML", document.html());
+             jobject.addProperty("componentHTML", document.body().html());
              String dummyJsonToThrow = gson.toJson(jelement);
              return dummyJsonToThrow;
            
