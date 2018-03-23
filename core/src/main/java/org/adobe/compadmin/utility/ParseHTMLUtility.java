@@ -102,7 +102,7 @@ public class ParseHTMLUtility {
 		JSONObject finalResponse = new JSONObject();
 		try {
 			JSONObject dialog = new JSONObject(dialogString);
-			String placeholderHTML ="<div data-sly-test=\"${wcmmode.edit &amp;&amp; !properties.element0}\" class=\"cq-placeholder\"\n" +
+			String placeholderHTML ="<div data-sly-test=\"${!properties.element0}\" class=\"cq-placeholder\"\n" +
                "data-emptytext=\"Please configure the component here..\" ></div>";
 			Element firstDiv = document.select("div").first();
 			firstDiv.before(placeholderHTML);
