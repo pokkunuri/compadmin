@@ -52,20 +52,16 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 	@Override
 	protected final void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response)
 			throws ServletException, IOException {
-		//String componentStructure = "{\"compTitle\": \"sample ddd\",\"compDesc\": \"sample\",\"compGroup\": \"test\",\"compHTML\": \"asdadssdasdasdasdsa\",\"dialog\": [{\"resourceType\": \"textfield\",\"fieldLabel\": \"sample\",\"isMandatory\": \"No\"},{\"resourceType\": \"image\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"resourceType\"},{\"resourceType\": \"textfield\",\"fieldLabel\": \"sample\",\"isMandatory\": \"No\"},{\"resourceType\": \"image\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"resourceType\": \"pathfield\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"Yes\"},{\"resourceType\": \"pathfield\",\"fieldLabel\": \"sampleImage\",\"isMandatory\": \"No\"}]}";
-		String componentStructure = request.getParameter("formdata");
-		log.info("formData",componentStructure);
 		ResourceResolver resolver = request.getResourceResolver();
 
         String requestBody = ParseHTMLUtility.getBody(request);
 
 		try {
-            JSONObject requestObj = new JSONObject(requestBody);
-			JSONObject jObject = new JSONObject(componentStructure.trim());
+			JSONObject jObject = new JSONObject(requestBody);
 			String compTitle = jObject.getString("compTitle");
 			String compDesc = jObject.getString("compDesc");
 			String compGroup = jObject.getString("compGroup");
-			String compHTML = jObject.getString("compHTML");
+			String compHTML = jObject.getString("compHtml");
 			createComponent(compTitle, compDesc, compGroup, compHTML, resolver);
 			createComponentDialog(compTitle, jObject, resolver);
 			resolver.commit();
@@ -136,8 +132,10 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 					break;
 				case IMAGE:
 					addImageToNode(items2, property, i, resolver);
+					break;
 				case PATHFIELD:
 					addPathfieldToNode(items2, property, i, resolver);
+					break;
 				default:
 					break;
 				}
