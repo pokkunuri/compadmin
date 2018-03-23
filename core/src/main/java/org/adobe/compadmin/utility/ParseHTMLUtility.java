@@ -32,10 +32,69 @@ public class ParseHTMLUtility {
 		ruleMap.put("img", "attribute,src,image");
 	    ruleMap.put("button", "arrtribute,href,pathfield");
 
+
 		parseHTMLUsingRuleMap(html);
 
 	}
 
+	public static void parseHTML(String html) {
+		Document document = Jsoup.parse(html);
+		document.traverse(new NodeVisitor() {
+			int counter = 0;
+			final Map<String, String> myMap = new LinkedHashMap<String, String>();
+			
+	
+	
+
+
+			public void head(Node node, int depth) {
+//				System.out.println(node.nodeName());
+				// TextField
+				if ((node instanceof TextNode && !((TextNode) node).isBlank())) {
+					
+					String replacementValue = "${properties.element"
+							+ (counter) + "}";
+					String xtype = validateTextType(((TextNode) node).text());
+					myMap.put(replacementValue, xtype);
+					// replace val
+					Node myNode = node.parent();
+					Element element = (Element) myNode;
+					element.text(replacementValue);
+					
+					counter++;
+
+				} else if ( node.nodeName().equalsIgnoreCase("img") || node.nodeName().equalsIgnoreCase("a")) {
+					
+					String replacementValue = "${properties.element"
+							+ (counter) + "}";
+					
+					if(node.nodeName().equalsIgnoreCase("a")){
+						node.attr("href", replacementValue);
+						myMap.put(replacementValue, "pathfield");
+					
+					}
+					if(node.nodeName().equalsIgnoreCase("img")){
+						node.attr("src", replacementValue);
+						myMap.put(replacementValue, "image");
+
+						
+					}
+					counter++;
+
+				}
+
+			}
+
+			public void tail(Node node, int depth) {
+
+			}
+		});
+		
+		System.out.println("hello"+document.html());
+
+	}
+	
+	
 
 	public static void parseHTMLUsingRuleMap(String html) {
 		Document document = Jsoup.parse(html);
@@ -43,7 +102,12 @@ public class ParseHTMLUtility {
 			int counter = 0;
 			final Map<String, String> myMap = new LinkedHashMap<String, String>();
 			
+	
+	
+
+
 			public void head(Node node, int depth) {
+//				System.out.println(node.nodeName());
 				// TextField
 				if ((node instanceof TextNode && !((TextNode) node).isBlank())) {
 					
