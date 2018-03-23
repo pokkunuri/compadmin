@@ -102,7 +102,7 @@ angular.module('acs-commons-component-admin-app', ['acsCoral', 'ACS.Commons.noti
 			rowData["resourceType"] = $selected.value;
 
 			var $isMandatory = $row.querySelector("input[type='radio']");
-			rowData["isMandatory"] = $isMandatory.value;
+			rowData["isMandatory"] = $isMandatory.checked;
 
 			var $fieldLabel = $row.querySelector("[name='fieldLabel']");
 			rowData["fieldLabel"] = $fieldLabel.value;
