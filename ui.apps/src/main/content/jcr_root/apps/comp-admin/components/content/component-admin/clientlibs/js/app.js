@@ -149,7 +149,7 @@ $scope.saveConfig2 = function () {
 	   processedHtml = data.processedHtml;
 	   for (var element in dialogFields) {
 		   var $row = createRow($table);
-		   var $counterCell = createCell($row, element, "js-counter-" + counter);
+		   var $counterCell = createCell($row, counter, "js-counter-" + counter);
 		   
 		   var $fieldTypeCell = createCell($row, dialogFields[element], "js-field-type" + counter);
 		   
