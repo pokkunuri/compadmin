@@ -10,11 +10,16 @@
    
     <div class="form-row">
     
+   <table border="0">
+   <tr>
+   <td width="33%">
     <textarea is="coral-textarea" ng-required="true" ng-pattern="/^\/.+$/" ng-model="form.componentHtml" placeholder="Provide Component HTML Design" name="componentHtml" value="" rows="20" cols="500">
 </textarea>
+</td width="50%">
+<td>
+	<img src="/apps/comp-admin/components/content/component-admin/clientlibs/images/Picture2.png" width="114%"></ima>
 
-   </div>
-   
+   </td></tr></table>
 
      <div class="form-row">
    <button

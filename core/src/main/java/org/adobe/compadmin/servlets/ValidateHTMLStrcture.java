@@ -42,8 +42,8 @@ private static final Logger log = LoggerFactory.getLogger(ValidateHTMLStrcture.c
 
             jsonResponse.put("dialog", dialogFields);
             jsonResponse.put("processedHtml", "this will be processed html");*/
-        	String html = request.getParameter("componentHtml");
-        	String jsonToProcess = ParseHTMLUtility.parseHTMLUsingRuleMap(html);
+       // 	String html = request.getParameter("componentHtml");
+        	String jsonToProcess = ParseHTMLUtility.parseHTMLUsingRuleMap(bodyObj.getJSONObject("componentHtml").getString("componentHtml"));
         	log.debug("Json to process {} ", jsonToProcess);
 
             // Write the JSON to the response
