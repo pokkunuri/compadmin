@@ -25,31 +25,11 @@ public class ParseHTMLUtility {
        private static Map<String, String> ruleMap = new LinkedHashMap<String, String>();
        private static Map<String, String> myMap = new LinkedHashMap<String, String>();
 
-
-       public static void main(String[] args) {
-             String html = "<div class=\"article__category-block__copy-container\">"
-                          + " <h2 class=\"article__category-block__title\">Check in online</h2>"
-                          + "<p class=\"article__category-block__description\">"
-                          + "Complete your registration online to make your arrival process even quicker. Simply fill in your details ahead of your break then have your booking reference and accommodation number on hand at arrival.\n"
-                          + "</p>" +"<img src=\"\"/>"+ "<a class=\"btn btn--book\" href=\"#\" target=\"\">"
-                          + "<span>how are you.</span>" + "</a>" + "</div>";
-             
-             ruleMap.put("a", "attribute,href,pathfield");
+       public static String parseHTMLUsingRuleMap(String html) {
+    	     ruleMap.put("a", "attribute,href,pathfield");
              ruleMap.put("img", "attribute,src,image");
              ruleMap.put("button", "arrtribute,href,pathfield");
-
-             String dummyHTML = parseHTMLUsingRuleMap(html);
-             Gson gson = new Gson();
-             String jsonString  = gson.toJson(myMap);
-             JsonElement jelement = new JsonParser().parse(jsonString);
-             JsonObject jobject = jelement.getAsJsonObject();
-             jobject.addProperty("componentHTML", dummyHTML);
-             String dummyJsonToThrow = gson.toJson(jelement);
-             //System.out.println(dummyJsonToThrow);
-
-       }
-
-       public static String parseHTMLUsingRuleMap(String html) {
+           
              Document document = Jsoup.parseBodyFragment(html);
              document.traverse(new NodeVisitor() {
                     int counter = 0;
@@ -92,8 +72,13 @@ public class ParseHTMLUtility {
 
                     }
              });
-             System.out.println(document.html());
-           return document.html();
+             Gson gson = new Gson();
+             String jsonString  = gson.toJson(myMap);
+             JsonElement jelement = new JsonParser().parse(jsonString);
+             JsonObject jobject = jelement.getAsJsonObject();
+             jobject.addProperty("componentHTML", document.html());
+             String dummyJsonToThrow = gson.toJson(jelement);
+             return dummyJsonToThrow;
            
 
        }

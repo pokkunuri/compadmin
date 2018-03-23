@@ -1,9 +1,14 @@
 package org.adobe.compadmin.servlets;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 
+import org.adobe.compadmin.utility.ParseHTMLUtility;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -21,9 +26,6 @@ import org.slf4j.LoggerFactory;
 )
 public class ValidateHTMLStrcture extends SlingAllMethodsServlet {
 
-/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 private static final Logger log = LoggerFactory.getLogger(ValidateHTMLStrcture.class);
 	@SuppressWarnings("unchecked")
@@ -34,13 +36,16 @@ private static final Logger log = LoggerFactory.getLogger(ValidateHTMLStrcture.c
 		response.setContentType("application/json");
 		JSONObject jsonResponse = new JSONObject();
         try {
-            JSONObject dialogFields = new JSONObject();
+            /*JSONObject dialogFields = new JSONObject();
             dialogFields.put("1", "textfield");
             dialogFields.put("2", "image");
             dialogFields.put("3", "pathfield");
 
             jsonResponse.put("dialog", dialogFields);
-            jsonResponse.put("processedHtml", "this will be processed html");
+            jsonResponse.put("processedHtml", "this will be processed html");*/
+        	String html = request.getParameter("componentHtml");
+        	String jsonToProcess = ParseHTMLUtility.parseHTMLUsingRuleMap(html);
+        	log.debug("Json to process {} ", jsonToProcess);
 
             // Write the JSON to the response
             response.getWriter().write(jsonResponse.toString(3));
