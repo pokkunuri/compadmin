@@ -155,25 +155,11 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 			return;
 		}
 		try {
-			Node pathCell = JcrUtil.createUniqueNode(items, "path" + count, JcrConstants.NT_UNSTRUCTURED, session);
-			pathCell.setProperty("sling:resourceType", "granite/ui/components/foundation/section");
-			pathCell.setProperty("jcr:title", property.getString("fieldLabel"));
-			Node layout = JcrUtil.createUniqueNode(pathCell, "layout", JcrConstants.NT_UNSTRUCTURED, session);
-			layout.setProperty("margin", false);
-			layout.setProperty("sling:resourceType", "granite/ui/components/foundation/layouts/fixedcolumns");
-			Node items1 = JcrUtil.createUniqueNode(pathCell, "items", JcrConstants.NT_UNSTRUCTURED, session);
-			Node column = JcrUtil.createUniqueNode(items1, "column", JcrConstants.NT_UNSTRUCTURED, session);
-			column.setProperty("sling:resourceType", "granite/ui/components/foundation/container");
-			Node items2 = JcrUtil.createUniqueNode(column, "items", JcrConstants.NT_UNSTRUCTURED, session);
-			Node link = JcrUtil.createUniqueNode(items2, "link", JcrConstants.NT_UNSTRUCTURED, session);
+			Node link = JcrUtil.createUniqueNode(items, "path" + count, JcrConstants.NT_UNSTRUCTURED, session);
 			link.setProperty("sling:resourceType", "granite/ui/components/foundation/form/pathbrowser");
-			link.setProperty("name", "./path" + count + "/element" + count);
+			link.setProperty("name", "./element" + count);
 			link.setProperty("fieldLabel", property.getString("fieldLabel"));
 			link.setProperty("required", property.getString("isMandatory").equals("Yes") ? true : false);
-			Node title = JcrUtil.createUniqueNode(items2, "title", JcrConstants.NT_UNSTRUCTURED, session);
-			title.setProperty("sling:resourceType", "granite/ui/components/coral/foundation/form/textfield");
-			title.setProperty("name", "./path" + count + "/elementalttext" + count);
-			title.setProperty("fieldLabel", "Title");
 		} catch (RepositoryException e) {
 			log.error("Error in creating imagefield {}", e);
 		} catch (JSONException e) {
@@ -188,35 +174,16 @@ public class CreateComponentServlet extends SlingAllMethodsServlet {
 			return;
 		}
 		try {
-			Node imageCell = JcrUtil.createUniqueNode(items, "image" + count, JcrConstants.NT_UNSTRUCTURED, session);
-			imageCell.setProperty("sling:resourceType", "granite/ui/components/foundation/section");
-			imageCell.setProperty("jcr:title", property.getString("fieldLabel"));
-			Node layout = JcrUtil.createUniqueNode(imageCell, "layout", JcrConstants.NT_UNSTRUCTURED, session);
-			layout.setProperty("margin", false);
-			layout.setProperty("sling:resourceType", "granite/ui/components/foundation/layouts/fixedcolumns");
-			Node items1 = JcrUtil.createUniqueNode(imageCell, "items", JcrConstants.NT_UNSTRUCTURED, session);
-			Node column = JcrUtil.createUniqueNode(items1, "column", JcrConstants.NT_UNSTRUCTURED, session);
-			column.setProperty("sling:resourceType", "granite/ui/components/foundation/container");
-			Node items2 = JcrUtil.createUniqueNode(column, "items", JcrConstants.NT_UNSTRUCTURED, session);
-			Node file = JcrUtil.createUniqueNode(items2, "file", JcrConstants.NT_UNSTRUCTURED, session);
+			Node file = JcrUtil.createUniqueNode(items, "image"+count, JcrConstants.NT_UNSTRUCTURED, session);
 			file.setProperty("sling:resourceType", "cq/gui/components/authoring/dialog/fileupload");
-			file.setProperty("name", "./image" + count + "/element" + count);
+			file.setProperty("name", "./element" + count);
 			file.setProperty("uploadUrl", "${suffix.path}");
-			file.setProperty("fileNameParameter", "./image" + count + "/fileName");
-			file.setProperty("fileReferenceParameter", "./image" + count + "/filereference");
+			file.setProperty("fileNameParameter", "./fileName");
+			file.setProperty("fileReferenceParameter", "./filereference");
 			file.setProperty("fieldLabel", "Image Asset");
-			if (property.getString("isMandatory").equals("Yes")) {
-				Node altText = JcrUtil.createUniqueNode(items2, "alttext", JcrConstants.NT_UNSTRUCTURED, session);
-				altText.setProperty("sling:resourceType", "granite/ui/components/coral/foundation/form/textfield");
-				altText.setProperty("name", "./image" + count + "/elementalttext" + count);
-				altText.setProperty("fieldLabel", "Alt-text");
-				altText.setProperty("required",true);
-			}
 		} catch (RepositoryException e) {
 			log.error("Error in creating imagefield {}", e);
-		} catch (JSONException e) {
-			log.error("Error in parsing JSON for dialog {}", e);
-		}
+		} 
 	}
 
 	private void addTextfieldToNode(Node items, JSONObject property, int count, ResourceResolver resolver) {
